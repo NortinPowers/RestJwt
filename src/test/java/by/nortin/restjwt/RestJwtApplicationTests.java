@@ -1,10 +1,10 @@
-package by.nortin.restjwttempl;
+package by.nortin.restjwt;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RestJwtTemplApplicationTests {
+class RestJwtApplicationTests {
 
     @Test
     void contextLoads() {

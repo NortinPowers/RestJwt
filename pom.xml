@@ -6,13 +6,13 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.1.1</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>by.nortin</groupId>
-    <artifactId>restJwtTempl</artifactId>
+    <artifactId>restJwt</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>restJwtTempl</name>
-    <description>restJwtTempl</description>
+    <description>restJwt</description>
 
     <properties>
         <java.version>20</java.version>
@@ -26,12 +26,42 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <openapi.version>2.1.0</openapi.version>
         <swagger.version>2.2.9</swagger.version>
+        <jjwt-api>0.11.5</jjwt-api>
+<!--        <flyway-core>9.20.1</flyway-core>-->
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
@@ -53,8 +83,8 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -94,6 +124,18 @@
             <version>${swagger.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt-api}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+<!--            <version>9.20.1</version>-->
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -264,5 +306,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
