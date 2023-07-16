@@ -17,4 +17,9 @@ public class MainController {
     public String getUnSecurityInfo() {
         return "UnSecurity";
     }
+
+    @GetMapping("/admin")
+    public String getAdminPage() {
+        return "Admin page";
+    }
 }
