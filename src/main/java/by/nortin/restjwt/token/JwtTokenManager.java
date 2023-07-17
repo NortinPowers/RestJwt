@@ -21,13 +21,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenManager {
 
-    @Value("${jwt.secret}")
-    private String secret;
+//    @Value("${jwt.secret}")
+//    private String secret;
+
+    private final Key key;
+
+    public JwtTokenManager(@Value("${jwt.secret}") String secret) {
+        this.key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+    }
 
     @Value("${jwt.lifetime}")
     private Duration jwtLifetime;
-
-    private final Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 
     public String generateJwtToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
@@ -37,11 +41,13 @@ public class JwtTokenManager {
         claims.put(ROLES, roles);
         Date issuedDate = new Date();
         Date expiredDate = new Date(issuedDate.getTime() + jwtLifetime.toMillis());
+//        Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(issuedDate)
                 .setExpiration(expiredDate)
+//                .signWith(HS256, secret)
                 .signWith(key, HS256)
                 .compact();
     }
@@ -56,6 +62,7 @@ public class JwtTokenManager {
     }
 
     private Claims getAllClaimsFromToken(String token) {
+//        Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

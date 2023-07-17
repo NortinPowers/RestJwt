@@ -1,9 +1,8 @@
 package by.nortin.restjwt.service;
 
 import by.nortin.restjwt.domain.User;
-import java.util.Collections;
+import by.nortin.restjwt.security.CustomUserDetail;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,11 +16,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        User user = userService.getUserByUsername(username);
+//        return new org.springframework.security.core.userdetails.User(
+//                user.getUserName(),
+//                user.getPassword(),
+//                Collections.singleton(new SimpleGrantedAuthority(user.getRole().getName()))
+//        );
         User user = userService.getUserByUsername(username);
-        return new org.springframework.security.core.userdetails.User(
-                user.getUserName(),
-                user.getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority(user.getRole().getName()))
-        );
+        return new CustomUserDetail(user);
     }
 }
