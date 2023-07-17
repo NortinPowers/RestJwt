@@ -16,7 +16,6 @@
 
     <properties>
         <java.version>20</java.version>
-        <maven.compiler.version>20</maven.compiler.version>
         <snakeyaml.version>2.0</snakeyaml.version>
         <pmd.version>6.55.0</pmd.version>
         <maven-pmd-plugin.version>3.20.0</maven-pmd-plugin.version>
@@ -27,7 +26,6 @@
         <openapi.version>2.1.0</openapi.version>
         <swagger.version>2.2.9</swagger.version>
         <jjwt-api>0.11.5</jjwt-api>
-<!--        <flyway-core>9.20.1</flyway-core>-->
     </properties>
 
     <dependencies>
@@ -132,7 +130,6 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-<!--            <version>9.20.1</version>-->
         </dependency>
 
 
@@ -198,7 +195,7 @@
                 <configuration>
                     <failOnViolation>false</failOnViolation>
                     <printFailingErrors>true</printFailingErrors>
-                    <targetJdk>${maven.compiler.version}</targetJdk>
+                    <targetJdk>${java.version}</targetJdk>
                     <linkXRef>false</linkXRef>
                     <excludeRoots>
                         <excludeRoot>target/generated-sources</excludeRoot>
