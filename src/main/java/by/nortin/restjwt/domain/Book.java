@@ -1,21 +1,18 @@
 package by.nortin.restjwt.domain;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "books")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Role extends BaseEntity {
+public class Book extends BaseEntity {
 
-    private String name;
-    @OneToMany(mappedBy = "role")
-    private List<User> users;
+    private String title;
+    private String author;
 }
