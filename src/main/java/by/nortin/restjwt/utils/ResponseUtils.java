@@ -16,6 +16,7 @@ public class ResponseUtils {
     public static final String UPDATE_MESSAGE = "The %s have been successful updated";
     public static final String DELETION_MESSAGE = "The %s have been successful deleted";
     public static final String BAD_CREDENTIALS_EXCEPTION_MESSAGE = "Incorrect login or password";
+    public static final String ACCESS_DENIED_EXCEPTION_MESSAGE = "You don't have access rights";
     public static final String NOT_FOUND_EXCEPTION_MESSAGE = "Specify the entered data";
     public static final String CITY_NOT_FOUND_EXCEPTION_MESSAGE = "The entered city is not listed in the database";
     public static final String DATA_INTEGRITY_VIOLATION_EXCEPTION_MESSAGE = "The input data does not correspond to the required";

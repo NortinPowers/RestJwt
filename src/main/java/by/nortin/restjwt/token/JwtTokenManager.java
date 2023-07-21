@@ -26,12 +26,12 @@ public class JwtTokenManager {
 
     private final Key key;
 
+    @Value("${jwt.lifetime}")
+    private Duration jwtLifetime;
+
     public JwtTokenManager(@Value("${jwt.secret}") String secret) {
         this.key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
     }
-
-    @Value("${jwt.lifetime}")
-    private Duration jwtLifetime;
 
     public String generateJwtToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
@@ -66,7 +66,7 @@ public class JwtTokenManager {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 }
