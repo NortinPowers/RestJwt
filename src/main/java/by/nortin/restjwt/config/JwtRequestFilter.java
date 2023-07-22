@@ -60,6 +60,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 if (incorrect) {
                     log.debug(exceptionMessage);
                     customAccessDeniedHandler.handle(request, response, new AccessDeniedException(exceptionMessage));
+                    //noinspection ReturnInsideFinallyBlock
+
+                    // rewrite (or if (flag) on chain)
+                    return;
 //                    customAuthenticationEntryPointExceptionHandler.commence(request, response, new AuthenticationException(exceptionMessage) {
 //                    });
                 }
