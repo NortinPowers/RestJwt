@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
@@ -14,8 +15,8 @@ public class ErrorValidationResponse extends BaseResponse {
     @Schema(description = "Exception type", example = "Some validation exception")
     private String type;
 
-    public ErrorValidationResponse(Integer status, List<String> errors, String type) {
-        super(status);
+    public ErrorValidationResponse(HttpStatus status, List<String> errors, String type) {
+        super(status.value());
         this.errors = errors;
         this.type = type;
     }

@@ -119,6 +119,147 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "getAllBooks",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoidXNlciIsImlhdCI6MTY5MDAzMjU0MywiZXhwIjoxNjkwMDMzMTQzfQ.4jMgZX2jkZjaZzy36Q2kby_lA9xliC4rs36To7sNJdg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/book",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOneBook",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoidXNlciIsImlhdCI6MTY5MDAzNjI2NywiZXhwIjoxNjkwMDM2ODY3fQ.IsEdGZrNzyQx6gRieNMGblEADFPPn9Q6Wk1hhfiaq84",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/book/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteOneBook",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoidXNlciIsImlhdCI6MTY5MDAzNjI2NywiZXhwIjoxNjkwMDM2ODY3fQ.IsEdGZrNzyQx6gRieNMGblEADFPPn9Q6Wk1hhfiaq84",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/book/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteOneBook Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoidXNlciIsImlhdCI6MTY5MDAzNjI2NywiZXhwIjoxNjkwMDM2ODY3fQ.IsEdGZrNzyQx6gRieNMGblEADFPPn9Q6Wk1hhfiaq84",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/book/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book",
+						"6"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
