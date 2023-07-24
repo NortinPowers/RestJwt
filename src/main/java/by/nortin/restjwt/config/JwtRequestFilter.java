@@ -32,17 +32,32 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
-        String jwt = null;
-        String username = null;
+//        String jwt = null;
+//        String username = null;
         if (authorization != null && authorization.startsWith("Bearer ")) {
-            jwt = authorization.substring(7);
-            boolean incorrect = false;
-            String exceptionMessage = "";
+            String jwt = authorization.substring(7);
+//            jwt = authorization.substring(7);
+//            boolean incorrect = false;
+//            String exceptionMessage = "";
             try {
-                username = jwtTokenManager.getUserName(jwt);
+                String username = jwtTokenManager.getUserName(jwt);
+//                username = jwtTokenManager.getUserName(jwt);
+
+                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                            username,
+                            null,
+                            jwtTokenManager.getUserRoles(jwt).stream().map(SimpleGrantedAuthority::new).toList()
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
+//                filterChain.doFilter(request, response);
+
             } catch (MalformedJwtException exception) {
-                incorrect = true;
-                exceptionMessage = "Incorrect token";
+                createExceptionResponse(request, response, "Incorrect token");
+                return;
+//                incorrect = true;
+//                exceptionMessage = "Incorrect token";
 
 //                +
 //                String errorText = "ERROR!!!";
@@ -50,34 +65,44 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //                response.getWriter().write(errorText);
 
             } catch (ExpiredJwtException exception) {
-                incorrect = true;
-                exceptionMessage = "The life cycle of the token is completed";
+                createExceptionResponse(request, response, "The life cycle of the token is completed");
+                return;
+//                incorrect = true;
+//                exceptionMessage = "The life cycle of the token is completed";
             } catch (SignatureException exception) {
-                incorrect = true;
-                exceptionMessage = "Incorrect signature";
-//            }
-            } finally {
-                if (incorrect) {
-                    log.debug(exceptionMessage);
-                    customAccessDeniedHandler.handle(request, response, new AccessDeniedException(exceptionMessage));
-                    //noinspection ReturnInsideFinallyBlock
-
-                    // rewrite (or if (flag) on chain)
-                    return;
-//                    customAuthenticationEntryPointExceptionHandler.commence(request, response, new AuthenticationException(exceptionMessage) {
-//                    });
-                }
+                createExceptionResponse(request, response, "Incorrect signature");
+                return;
+//                incorrect = true;
+//                exceptionMessage = "Incorrect signature";
             }
+//            } finally {
+//                if (incorrect) {
+//                    createExceptionResponse(request, response, exceptionMessage);
+////                    customAccessDeniedHandler.handle(request, response, new AccessDeniedException(exceptionMessage));
+//                    //noinspection ReturnInsideFinallyBlock
+//
+//                    // rewrite (or if (flag) on chain)
+////                    return;
+////                    customAuthenticationEntryPointExceptionHandler.commence(request, response, new AuthenticationException(exceptionMessage) {
+////                    });
+//                }
+//            }
+//            filterChain.doFilter(request, response);
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                    username,
-                    null,
-                    jwtTokenManager.getUserRoles(jwt).stream().map(SimpleGrantedAuthority::new).toList()
-            );
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-        }
+//        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+//                    username,
+//                    null,
+//                    jwtTokenManager.getUserRoles(jwt).stream().map(SimpleGrantedAuthority::new).toList()
+//            );
+//            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+//        }
         filterChain.doFilter(request, response);
+    }
+
+    private void createExceptionResponse(HttpServletRequest request, HttpServletResponse response, String exceptionMessage) throws IOException, ServletException {
+        log.debug(exceptionMessage);
+        customAccessDeniedHandler.handle(request, response, new AccessDeniedException(exceptionMessage));
     }
 }
