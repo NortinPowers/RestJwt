@@ -8,11 +8,9 @@ import jakarta.persistence.MappedSuperclass;
 import java.io.Serializable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @MappedSuperclass
-@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode

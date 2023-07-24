@@ -6,12 +6,10 @@ import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "roles")
-@NoArgsConstructor
 @Getter
 @Setter
 public class Role extends BaseEntity implements Serializable {
