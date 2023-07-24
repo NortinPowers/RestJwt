@@ -21,12 +21,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Component
@@ -41,12 +38,12 @@ public class CustomExceptionHandler {
     }
 
 //    -not work
-    @ExceptionHandler(InsufficientAuthenticationException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<BaseResponse> handleException(InsufficientAuthenticationException exception) {
-        ExceptionResponse response = getExceptionResponse(HttpStatus.UNAUTHORIZED, "InsufficientAuthenticationException", exception);
-        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-    }
+//    @ExceptionHandler(InsufficientAuthenticationException.class)
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+//    public ResponseEntity<BaseResponse> handleException(InsufficientAuthenticationException exception) {
+//        ExceptionResponse response = getExceptionResponse(HttpStatus.UNAUTHORIZED, "InsufficientAuthenticationException", exception);
+//        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+//    }
 ////    -not work test
 //    @ExceptionHandler(RuntimeException.class)
 //    @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -77,12 +74,12 @@ public class CustomExceptionHandler {
     }
 
 //    -not work
-    @ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<BaseResponse> handleException(AuthenticationException exception) {
-        ExceptionResponse response = getExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage(), exception);
-        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-    }
+//    @ExceptionHandler(AuthenticationException.class)
+//    @ResponseStatus(HttpStatus.FORBIDDEN)
+//    public ResponseEntity<BaseResponse> handleException(AuthenticationException exception) {
+//        ExceptionResponse response = getExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage(), exception);
+//        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+//    }
 
 //    @ExceptionHandler(MalformedJwtException.class)
 //    public ResponseEntity<BaseResponse> handleException(MalformedJwtException exception) {
