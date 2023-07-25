@@ -51,15 +51,14 @@ public class SecurityConfig {
 //                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPointExceptionHandler))
 
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint((request, response, exception) -> {
-                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                        response.setContentType(APPLICATION_JSON_VALUE);
-                        response.getWriter().write("{ \"error\": \"To get access, you need to transfer a token.\" }");
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                    response.setContentType(APPLICATION_JSON_VALUE);
+                    response.getWriter().write("{ \"error\": \"To get access, you need to transfer a token.\" }");
                 }))
 
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/main/admin").hasRole("ADMIN")
-                        .requestMatchers("/main/security").authenticated()
-                        .requestMatchers("/book", "/book/**").authenticated()
+                        .requestMatchers("/main/admin", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/main/security", "/book", "/book/**").authenticated()
                         .anyRequest().permitAll())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 //                .addFilterBefore(accessDeniedFilter, ExceptionTranslationFilter.class)
