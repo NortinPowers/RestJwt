@@ -20,12 +20,14 @@ public class ResponseUtils {
     public static final String CREATION_MESSAGE = "The %s have been successful created";
     public static final String UPDATE_MESSAGE = "The %s have been successful updated";
     public static final String DELETION_MESSAGE = "The %s have been successful deleted";
+    public static final String CHANGE_ROLE_MESSAGE = "The role from %s have been successful changed";
     public static final String BAD_CREDENTIALS_EXCEPTION_MESSAGE = "Incorrect login or password";
     public static final String BAD_TOKEN_EXCEPTION_MESSAGE = "Incorrect token";
     public static final String ACCESS_DENIED_EXCEPTION_MESSAGE = "You don't have access rights";
     public static final String NOT_FOUND_EXCEPTION_MESSAGE = "Specify the entered data";
     public static final String BOOK_NOT_FOUND_EXCEPTION_MESSAGE = "The entered book is not listed in the database";
     public static final String DATA_INTEGRITY_VIOLATION_EXCEPTION_MESSAGE = "The input data does not correspond to the required";
+    public static final String DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE = "Unexpected data source exception";
     public static final String JPA_OBJECT_RETRIEVAL_FAILURE_EXCEPTION_MESSAGE = "The data entered violates the established requirements";
     public static final String HTTP_NOT_READABLE_EXCEPTION_MESSAGE = "The entered data is incorrect and leads to an error";
     public static final String METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE = "The transmitted data did not pass verification";
