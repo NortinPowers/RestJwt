@@ -36,12 +36,12 @@ public class ResponseUtils {
         return new MessageResponse(HttpStatus.OK.value(), String.format(message, getClassName(t).toLowerCase()), t);
     }
 
-    public static <T> MessageResponse getSuccessResponse(String message, String className) {
+    public static MessageResponse getSuccessResponse(String message, String className) {
         return new MessageResponse(HttpStatus.OK.value(), String.format(message, className.toLowerCase()), className);
     }
 
     public static ExceptionResponse getExceptionResponse(HttpStatus status, String message, Exception exception) {
-        return new ExceptionResponse(status.value(), message, exception.getClass().getSimpleName());
+        return new ExceptionResponse(status, message, exception.getClass().getSimpleName());
     }
 
     public static List<String> getErrorValidationMessages(MethodArgumentNotValidException exception) {
