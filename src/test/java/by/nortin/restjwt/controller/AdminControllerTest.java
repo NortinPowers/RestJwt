@@ -36,13 +36,6 @@ class AdminControllerTest {
     @MockBean
     private AdminService adminService;
 
-    /*
-     public ResponseEntity<BaseResponse> setAdmin(@PathVariable("id") @Min(1) Long id) {
-        adminService.setAdmin(id);
-        return ResponseEntity.ok(getSuccessResponse(CHANGE_ROLE_MESSAGE, User.class));
-    }
-     */
-
     @Nested
     class TestSetAdmin{
 
@@ -60,7 +53,7 @@ class AdminControllerTest {
         @Test
         @WithMockUser(username = "user", roles = "USER")
         void test_setAdmin_roleUser_denied() throws Exception {
-            ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN.value(), "Access Denied", "AccessDeniedException");
+            ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", "AccessDeniedException");
             ObjectMapper mapper = getObjectMapperWithTimeModule();
 //            String accessDeniedExceptionJson = "{\"status\":403,\"timestamp\":\"2023-07-26\",\"message\":\"Access Denied\",\"type\":\"AccessDeniedException\"}";
 
@@ -98,7 +91,7 @@ class AdminControllerTest {
         @Test
         @WithMockUser(username = "user", roles = "USER")
         void test_getAllUser_roleUser_denied() throws Exception {
-            ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN.value(), "Access Denied", "AccessDeniedException");
+            ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", "AccessDeniedException");
 
             mockMvc.perform(get(url))
                     .andExpect(status().isForbidden())
