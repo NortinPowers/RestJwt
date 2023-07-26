@@ -4,7 +4,6 @@ import static by.nortin.restjwt.utils.ResponseUtils.CHANGE_ROLE_MESSAGE;
 import static by.nortin.restjwt.utils.ResponseUtils.getSuccessResponse;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import by.nortin.restjwt.domain.User;
 import by.nortin.restjwt.dto.UserDto;
 import by.nortin.restjwt.model.BaseResponse;
 import by.nortin.restjwt.model.ExceptionResponse;
@@ -51,7 +50,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BaseResponse> setAdmin(@PathVariable("id") @Min(1) Long id) {
         adminService.setAdmin(id);
-        return ResponseEntity.ok(getSuccessResponse(CHANGE_ROLE_MESSAGE, User.class));
+        return ResponseEntity.ok(getSuccessResponse(CHANGE_ROLE_MESSAGE, "user"));
     }
 
     @Operation(

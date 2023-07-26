@@ -17,7 +17,8 @@ import lombok.Setter;
 @PasswordMatching
 @Valid
 @Schema(description = "Entity of User")
-public class UserRegistrationDto extends BaseDto {
+public class UserRegistrationDto {
+//public class UserRegistrationDto extends BaseDto {
 
     @NotBlank(message = "Enter username")
     @Pattern(regexp = USERNAME_PATTERN, message = "Incorrect username")
