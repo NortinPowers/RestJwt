@@ -13,6 +13,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public User getUserByUsername(String username) {
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
     @Override
 //    @Transactional
     public void saveUser(UserRegistrationDto userRegistrationDto) {
+        userRegistrationDto.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
         User user = userMapper.convertToDomain(userRegistrationDto);
         Optional<Role> optionalRole = roleRepository.findByName("ROLE_USER");
         if (optionalRole.isPresent()) {
