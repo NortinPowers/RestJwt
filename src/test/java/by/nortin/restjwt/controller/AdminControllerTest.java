@@ -1,8 +1,8 @@
 package by.nortin.restjwt.controller;
 
-import static by.nortin.restjwt.utils.ResponseUtils.getObjectMapperWithTimeModule;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static by.nortin.restjwt.utils.ResponseUtils.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -14,6 +14,7 @@ import by.nortin.restjwt.model.ExceptionResponse;
 import by.nortin.restjwt.service.AdminService;
 import by.nortin.restjwt.utils.ResponseUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,9 +23,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,11 +39,29 @@ class AdminControllerTest {
     @MockBean
     private AdminService adminService;
 
-    @Nested
-    class TestSetAdmin{
+    private String url;
+    private final ExceptionResponse exceptionResponse;
 
-        private final String url = "/admin/set/{id}";
-        private final Long id = 1L;
+    private final ObjectMapper mapper;
+
+    {
+        mapper = ResponseUtils.getObjectMapperWithTimeModule();
+    }
+
+    {
+        exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", "AccessDeniedException");
+    }
+
+
+    @Nested
+    class TestSetAdmin {
+
+        private final Long id;
+
+        {
+            url = "/admin/set/{id}";
+            id = 1L;
+        }
 
         @Test
         @WithAnonymousUser
@@ -53,8 +74,8 @@ class AdminControllerTest {
         @Test
         @WithMockUser(username = "user", roles = "USER")
         void test_setAdmin_roleUser_denied() throws Exception {
-            ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", "AccessDeniedException");
-            ObjectMapper mapper = getObjectMapperWithTimeModule();
+//            ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", "AccessDeniedException");
+//            ObjectMapper mapper = getObjectMapperWithTimeModule();
 //            String accessDeniedExceptionJson = "{\"status\":403,\"timestamp\":\"2023-07-26\",\"message\":\"Access Denied\",\"type\":\"AccessDeniedException\"}";
 
             mockMvc.perform(patch(url, id))
@@ -70,15 +91,46 @@ class AdminControllerTest {
 
             mockMvc.perform(patch(url, id))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("message").value(String.format(ResponseUtils.CHANGE_ROLE_MESSAGE, "user")));
+                    .andExpect(jsonPath("message").value(String.format(CHANGE_ROLE_MESSAGE, "user")));
+        }
+
+        @Test
+        @WithMockUser(username = "admin", roles = "ADMIN")
+        void test_setAdmin_roleAdmin_dBError() throws Exception {
+            DataSourceLookupFailureException exception = new DataSourceLookupFailureException("it does not matter");
+            ExceptionResponse response = getExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE, exception);
+
+            doThrow(exception).when(adminService).setAdmin(any());
+
+            mockMvc.perform(patch(url, id))
+                    .andExpect(status().isInternalServerError())
+                    .andExpect(content().json(mapper.writeValueAsString(response)));
+        }
+
+        @Test
+        @WithMockUser(username = "admin", roles = "ADMIN")
+        void test_setAdmin_roleAdmin_entityNotFound() throws Exception {
+            EntityNotFoundException exception = new EntityNotFoundException("it does not matter");
+            ExceptionResponse response = getExceptionResponse(HttpStatus.NOT_FOUND, NOT_FOUND_EXCEPTION_MESSAGE, exception);
+
+            doThrow(exception).when(adminService).setAdmin(any());
+
+            mockMvc.perform(patch(url, id))
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().json(mapper.writeValueAsString(response)));
         }
     }
 
     @Nested
     class TestGetAllUser {
 
-        private final String url = "/admin/users";
-        private final ObjectMapper mapper = getObjectMapperWithTimeModule();
+        //        private final String url;
+        private final ObjectMapper mapper;
+
+        {
+            url = "/admin/users";
+            mapper = getObjectMapperWithTimeModule();
+        }
 
         @Test
         @WithAnonymousUser
@@ -91,7 +143,7 @@ class AdminControllerTest {
         @Test
         @WithMockUser(username = "user", roles = "USER")
         void test_getAllUser_roleUser_denied() throws Exception {
-            ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", "AccessDeniedException");
+//            ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", "AccessDeniedException");
 
             mockMvc.perform(get(url))
                     .andExpect(status().isForbidden())
@@ -100,14 +152,14 @@ class AdminControllerTest {
 
         @Test
         @WithMockUser(username = "admin", roles = "ADMIN")
-        void test_getAllUser_roleAdmin_denied() throws Exception {
+        void test_getAllUser_roleAdmin_alloyed() throws Exception {
             UserDto firstUser = new UserDto();
             firstUser.setId(1L);
-            firstUser.setUserName("One");
-            firstUser.setRole("ROLE_USER");
+            firstUser.setUserName("admin");
+            firstUser.setRole("ROLE_ADMIN");
             UserDto secondUser = new UserDto();
-            secondUser.setId(1L);
-            secondUser.setUserName("One");
+            secondUser.setId(2L);
+            secondUser.setUserName("user");
             secondUser.setRole("ROLE_USER");
             List<UserDto> users = List.of(firstUser, secondUser);
 
