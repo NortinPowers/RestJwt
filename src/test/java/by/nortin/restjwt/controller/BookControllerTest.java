@@ -1,23 +1,30 @@
 package by.nortin.restjwt.controller;
 
+import static by.nortin.restjwt.utils.ResponseUtils.BOOK_NOT_FOUND_EXCEPTION_MESSAGE;
 import static by.nortin.restjwt.utils.ResponseUtils.CREATION_MESSAGE;
 import static by.nortin.restjwt.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.DELETION_MESSAGE;
 import static by.nortin.restjwt.utils.ResponseUtils.HTTP_NOT_READABLE_EXCEPTION_MESSAGE;
 import static by.nortin.restjwt.utils.ResponseUtils.METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE;
 import static by.nortin.restjwt.utils.ResponseUtils.NOT_FOUND_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.UPDATE_MESSAGE;
 import static by.nortin.restjwt.utils.ResponseUtils.getExceptionResponse;
 import static by.nortin.restjwt.utils.ResponseUtils.getObjectMapperWithTimeModule;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import by.nortin.restjwt.dto.BookDto;
+import by.nortin.restjwt.exception.BookNotFoundException;
 import by.nortin.restjwt.model.ErrorValidationResponse;
 import by.nortin.restjwt.model.ExceptionResponse;
 import by.nortin.restjwt.service.BookService;
@@ -31,7 +38,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.mock.http.MockHttpInputMessage;
@@ -115,7 +121,7 @@ class BookControllerTest {
 
         @Test
         @WithAnonymousUser
-        void test_getOne_anonymous_denied() throws Exception{
+        void test_getOne_anonymous_denied() throws Exception {
             mockMvc.perform(get(url, id))
                     .andExpect(status().isUnauthorized())
                     .andExpect(jsonPath("error").value("To get access, you need to transfer a token."));
@@ -123,7 +129,7 @@ class BookControllerTest {
 
         @Test
         @WithMockUser(username = "user", roles = {"USER", "ADMIN"})
-        void test_getOne_authorized_alloyed() throws Exception{
+        void test_getOne_authorized_alloyed() throws Exception {
             BookDto bookDto = new BookDto();
             bookDto.setId(id);
             bookDto.setTitle("Test book");
@@ -138,7 +144,7 @@ class BookControllerTest {
 
         @Test
         @WithMockUser(username = "user", roles = {"USER", "ADMIN"})
-        void test_getOne_authorized_entityNotFound() throws Exception{
+        void test_getOne_authorized_entityNotFound() throws Exception {
             EntityNotFoundException exception = new EntityNotFoundException();
             ExceptionResponse response = getExceptionResponse(HttpStatus.NOT_FOUND, NOT_FOUND_EXCEPTION_MESSAGE, exception);
 
@@ -153,15 +159,6 @@ class BookControllerTest {
 
     @Nested
     class TestCreate {
-
-        /*
-         @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<BaseResponse> create(@Valid @RequestBody BookDto bookDto) {
-        bookService.addBook(bookDto);
-        return ResponseEntity.ok(getSuccessResponse(CREATION_MESSAGE, bookDto));
-    }
-         */
 
         private final String url = "/book";
         private final BookDto bookDto;
@@ -189,7 +186,7 @@ class BookControllerTest {
             ExceptionResponse response = getExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage(), exception);
 
             mockMvc.perform(post(url)
-                            .contentType(MediaType.APPLICATION_JSON)
+                            .contentType(APPLICATION_JSON)
                             .content(mapper.writeValueAsString(bookDto)))
                     .andExpect(status().isForbidden())
                     .andExpect(content().json(mapper.writeValueAsString(response)));
@@ -205,7 +202,7 @@ class BookControllerTest {
             doNothing().when(bookService).addBook(bookDto);
 
             mockMvc.perform(post(url)
-                            .contentType(MediaType.APPLICATION_JSON)
+                            .contentType(APPLICATION_JSON)
                             .content(mapper.writeValueAsString(bookDto)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("message").value(String.format(CREATION_MESSAGE, "book")));
@@ -216,12 +213,12 @@ class BookControllerTest {
         void test_create_roleAdmin_invalidBody() throws Exception {
             bookDto.setAuthor("Invalid author`s name");
             List<String> errors = List.of("Incorrect author`s name");
-            ErrorValidationResponse errorValidationResponse = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors , METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
+            ErrorValidationResponse errorValidationResponse = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors, METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
 
             doNothing().when(bookService).addBook(bookDto);
 
             mockMvc.perform(post(url)
-                            .contentType(MediaType.APPLICATION_JSON)
+                            .contentType(APPLICATION_JSON)
                             .content(mapper.writeValueAsString(bookDto)))
                     .andExpect(status().isBadRequest())
                     .andExpect(content().json(mapper.writeValueAsString(errorValidationResponse)));
@@ -233,12 +230,12 @@ class BookControllerTest {
             bookDto.setAuthor("");
             bookDto.setTitle("");
             List<String> errors = List.of("Enter title", "Incorrect author`s name", "Enter author");
-            ErrorValidationResponse errorValidationResponse = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors , METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
+            ErrorValidationResponse errorValidationResponse = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors, METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
 
             doNothing().when(bookService).addBook(bookDto);
 
             mockMvc.perform(post(url)
-                            .contentType(MediaType.APPLICATION_JSON)
+                            .contentType(APPLICATION_JSON)
                             .content(mapper.writeValueAsString(bookDto)))
                     .andExpect(status().isBadRequest())
                     .andExpect(content().json(mapper.writeValueAsString(errorValidationResponse)));
@@ -254,18 +251,177 @@ class BookControllerTest {
             doNothing().when(bookService).addBook(bookDto);
 
             mockMvc.perform(post(url)
-                            .contentType(MediaType.APPLICATION_JSON)
+                            .contentType(APPLICATION_JSON)
                             .content(mapper.writeValueAsString(body)))
                     .andExpect(status().isInternalServerError())
                     .andExpect(content().json(mapper.writeValueAsString(response)));
         }
     }
 
-    @Test
-    void update() {
+    @Nested
+    class TestUpdate {
+
+        private final String url;
+        private final Long id;
+        private final BookDto bookDto;
+
+        {
+            url = "/book/{id}";
+            id = 1L;
+            bookDto = new BookDto();
+            bookDto.setTitle("Updated Title");
+            bookDto.setAuthor("Updated Author");
+        }
+
+        @Test
+        @WithAnonymousUser
+        void test_update_anonymous_denied() throws Exception {
+            mockMvc.perform(patch(url, id))
+                    .andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("error").value("To get access, you need to transfer a token."));
+        }
+
+        @Test
+        @WithMockUser(username = "user", roles = "USER")
+        void test_update_roleUser_denied() throws Exception {
+            AccessDeniedException exception = new AccessDeniedException("Access Denied");
+            ExceptionResponse response = getExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage(), exception);
+
+            mockMvc.perform(patch(url, id)
+                            .contentType(APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(bookDto)))
+                    .andExpect(status().isForbidden())
+                    .andExpect(content().json(mapper.writeValueAsString(response)));
+        }
+
+        @Test
+        @WithMockUser(username = "admin", roles = "ADMIN")
+        void test_update_roleAdmin_allayed() throws Exception {
+            doNothing().when(bookService).updateBook(id, bookDto);
+
+            mockMvc.perform(patch(url, id)
+                            .contentType(APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(bookDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("message").value(String.format(UPDATE_MESSAGE, "book")));
+        }
+
+        @Test
+        @WithMockUser(username = "admin", roles = "ADMIN")
+        void test_update_roleAdmin_bookNotFound() throws Exception {
+            BookNotFoundException exception = new BookNotFoundException();
+            ExceptionResponse response = getExceptionResponse(HttpStatus.NOT_FOUND, BOOK_NOT_FOUND_EXCEPTION_MESSAGE, exception);
+
+            doThrow(exception).when(bookService).updateBook(id, bookDto);
+
+            mockMvc.perform(patch(url, id)
+                            .contentType(APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(bookDto)))
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().json(mapper.writeValueAsString(response)));
+        }
+
+        @Test
+        @WithMockUser(username = "admin", roles = "ADMIN")
+        void test_update_roleAdmin_invalidBody() throws Exception {
+            bookDto.setAuthor("");
+            List<String> errors = List.of("Enter author", "Incorrect author`s name");
+            ErrorValidationResponse errorValidationResponse = new ErrorValidationResponse(
+                    HttpStatus.BAD_REQUEST,
+                    errors,
+                    METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
+
+            doNothing().when(bookService).updateBook(id, bookDto);
+
+            mockMvc.perform(patch(url, id)
+                            .contentType(APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(bookDto)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().json(mapper.writeValueAsString(errorValidationResponse)));
+        }
+
+        @Test
+        @WithMockUser(username = "admin", roles = "ADMIN")
+        void test_update_roleAdmin_incorrectBody() throws Exception {
+            String body = "author, title";
+            HttpMessageNotReadableException exception = new HttpMessageNotReadableException(
+                    "not matter",
+                    new MockHttpInputMessage("not matter".getBytes())
+            );
+            ExceptionResponse response = getExceptionResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    HTTP_NOT_READABLE_EXCEPTION_MESSAGE,
+                    exception
+            );
+
+            doNothing().when(bookService).updateBook(id, bookDto);
+
+            mockMvc.perform(patch(url, id)
+                            .contentType(APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(body)))
+                    .andExpect(status().isInternalServerError())
+                    .andExpect(content().json(mapper.writeValueAsString(response)));
+        }
     }
 
-    @Test
-    void delete() {
+    @Nested
+    class TestDelete {
+
+        private final String url;
+        private final Long id;
+
+        {
+            url = "/book/{id}";
+            id = 1L;
+        }
+
+        @Test
+        @WithAnonymousUser
+        void test_delete_anonymous_denied() throws Exception {
+            mockMvc.perform(delete(url, id))
+                    .andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("error").value("To get access, you need to transfer a token."));
+        }
+
+        @Test
+        @WithMockUser(username = "user", roles = "USER")
+        void test_delete_roleUser_denied() throws Exception {
+            AccessDeniedException exception = new AccessDeniedException("Access Denied");
+            ExceptionResponse response = getExceptionResponse(
+                    HttpStatus.FORBIDDEN,
+                    exception.getMessage(),
+                    exception
+            );
+
+            mockMvc.perform(delete(url, id))
+                    .andExpect(status().isForbidden())
+                    .andExpect(content().json(mapper.writeValueAsString(response)));
+        }
+
+        @Test
+        @WithMockUser(username = "admin", roles = "ADMIN")
+        void test_delete_roleAdmin_alloyed() throws Exception {
+
+            mockMvc.perform(delete(url, id))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("message").value(String.format(DELETION_MESSAGE, "book")));
+        }
+
+        @Test
+        @WithMockUser(username = "admin", roles = "ADMIN")
+        void test_delete_roleAdmin_bookNotFound() throws Exception {
+            BookNotFoundException exception = new BookNotFoundException();
+            ExceptionResponse response = getExceptionResponse(
+                    HttpStatus.NOT_FOUND,
+                    BOOK_NOT_FOUND_EXCEPTION_MESSAGE,
+                    exception
+            );
+
+            doThrow(exception).when(bookService).deleteBook(id);
+
+            mockMvc.perform(delete(url, id))
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().json(mapper.writeValueAsString(response)));
+        }
     }
 }
