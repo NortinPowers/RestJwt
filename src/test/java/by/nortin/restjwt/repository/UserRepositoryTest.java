@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import by.nortin.restjwt.domain.Role;
+import by.nortin.restjwt.domain.User;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,33 +17,32 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(locations = TEST_PROPERTY_SOURCE_LOCATIONS)
-@Sql(value = "classpath:sql/role/role-repository-before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = "classpath:sql/role/role-repository-after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class RoleRepositoryTest {
+@Sql(value = "classpath:sql/user/user-repository-before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "classpath:sql/user/user-repository-after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+class UserRepositoryTest {
 
     @Autowired
-    private RoleRepository roleRepository;
+    private UserRepository userRepository;
 
-    private String testRole;
+    private String username;
 
     {
-        testRole = "ROLE_USER";
+        username = "admin";
     }
 
     @Test
-    void test_findByName_isPresent() {
-        Optional<Role> roleByRole = roleRepository.findByName(testRole);
+    void test_findByUserName_isPresent() {
+        Optional<User> optionalUser = userRepository.findByUserName(username);
 
-        assertTrue(roleByRole.isPresent());
-        assertEquals(testRole, roleByRole.get().getName());
+        assertTrue(optionalUser.isPresent());
+        assertEquals(username, optionalUser.get().getUserName());
     }
 
     @Test
-    void test_findByName_isNotPresent() {
-        testRole = "NotExistRole";
+    void test_findByUserName_isNotPresent() {
+        username = "nonExistUser";
+        Optional<User> optionalUser = userRepository.findByUserName(username);
 
-        Optional<Role> roleByRole = roleRepository.findByName(testRole);
-
-        assertFalse(roleByRole.isPresent());
+        assertFalse(optionalUser.isPresent());
     }
 }
