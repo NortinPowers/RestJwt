@@ -1,6 +1,6 @@
 package by.nortin.restjwt.dto;
 
-import static by.nortin.restjwt.test.utils.Constants.AUTHOR_PATTERN;
+import static by.nortin.restjwt.utils.Constants.AUTHOR_PATTERN;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
 package by.nortin.restjwt.validator;
 
-import static by.nortin.restjwt.test.utils.Constants.PASSWORDS_MATCHING;
+import static by.nortin.restjwt.utils.Constants.PASSWORDS_MATCHING;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 

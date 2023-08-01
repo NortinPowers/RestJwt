@@ -1,15 +1,15 @@
 package by.nortin.restjwt.controller;
 
-import static by.nortin.restjwt.test.utils.ResponseUtils.BOOK_NOT_FOUND_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.CREATION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.DELETION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.HTTP_NOT_READABLE_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.NOT_FOUND_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.UPDATE_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.getExceptionResponse;
-import static by.nortin.restjwt.test.utils.ResponseUtils.getObjectMapperWithTimeModule;
+import static by.nortin.restjwt.utils.ResponseUtils.BOOK_NOT_FOUND_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.CREATION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.DELETION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.HTTP_NOT_READABLE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.NOT_FOUND_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.UPDATE_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.getExceptionResponse;
+import static by.nortin.restjwt.utils.ResponseUtils.getObjectMapperWithTimeModule;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
