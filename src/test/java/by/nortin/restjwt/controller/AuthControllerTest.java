@@ -1,6 +1,11 @@
 package by.nortin.restjwt.controller;
 
-import static by.nortin.restjwt.utils.ResponseUtils.*;
+import static by.nortin.restjwt.test.utils.ResponseUtils.BAD_CREDENTIALS_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.CREATION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.HTTP_NOT_READABLE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.getExceptionResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -18,7 +23,7 @@ import by.nortin.restjwt.model.ErrorValidationResponse;
 import by.nortin.restjwt.model.ExceptionResponse;
 import by.nortin.restjwt.service.AuthService;
 import by.nortin.restjwt.service.UserService;
-import by.nortin.restjwt.utils.ResponseUtils;
+import by.nortin.restjwt.test.utils.ResponseUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -56,13 +61,11 @@ class AuthControllerTest {
     {
         mapper = ResponseUtils.getObjectMapperWithTimeModule();
     }
+
     @Nested
     class TestCreateToken {
 
-//        private final String url = "/auth";
-
         private final JwtRequest jwtRequest;
-
 
         {
             url = "/auth";
@@ -74,9 +77,7 @@ class AuthControllerTest {
         @Test
         void test_createAuthToken_success() throws Exception {
             String token = "header.payload.signature";
-//            jwtRequest.setUsername("user");
-//            jwtRequest.setPassword("password");
-            JwtResponse response = new JwtResponse(token);
+            JwtResponse jwtResponse = new JwtResponse(token);
 
             when(authService.getToken(any())).thenReturn(token);
 
@@ -84,15 +85,13 @@ class AuthControllerTest {
                             .contentType(APPLICATION_JSON)
                             .content(mapper.writeValueAsString(jwtRequest)))
                     .andExpect(status().isOk())
-                    .andExpect(content().json(mapper.writeValueAsString(response)));
+                    .andExpect(content().json(mapper.writeValueAsString(jwtResponse)));
         }
 
         @Test
         void test_createAuthToken_emptyBody() throws Exception {
             errors = List.of("Enter password", "Enter username");
-//            List<String> errors = List.of("Enter password", "Enter username");
             errorValidationResponse = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors, METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
-//            ErrorValidationResponse errorValidationResponse = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors, METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
             jwtRequest.setUsername("");
             jwtRequest.setPassword("");
 
@@ -106,11 +105,8 @@ class AuthControllerTest {
         @Test
         void test_createAuthToken_semiEmptyBody() throws Exception {
             errors = List.of("Enter password");
-//            List<String> errors = List.of("Enter password");
-//            jwtRequest.setUsername("user");
             jwtRequest.setPassword("");
             errorValidationResponse = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors, METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
-//            ErrorValidationResponse response = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors, METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
 
             mockMvc.perform(post(url)
                             .contentType(APPLICATION_JSON)
@@ -119,16 +115,11 @@ class AuthControllerTest {
                     .andExpect(content().json(mapper.writeValueAsString(errorValidationResponse)));
         }
 
-        record IncorrectJwtRequest(String name, String password) {
-        }
-
         @Test
         void test_createAuthToken_incorrectBody() throws Exception {
             IncorrectJwtRequest incorrectJwtRequest = new IncorrectJwtRequest("user", "password");
             errors = List.of("Enter username");
-//            List<String> errors = List.of("Enter username");
             errorValidationResponse = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors, METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
-//            ErrorValidationResponse response = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors, METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
 
             mockMvc.perform(post(url)
                             .contentType(APPLICATION_JSON)
@@ -139,11 +130,8 @@ class AuthControllerTest {
 
         @Test
         void test_createAuthToken_badCredentials() throws Exception {
-//            jwtRequest.setUsername("user");
-//            jwtRequest.setPassword("password");
             BadCredentialsException exception = new BadCredentialsException("it does not matter");
             response = getExceptionResponse(HttpStatus.UNAUTHORIZED, BAD_CREDENTIALS_EXCEPTION_MESSAGE, exception);
-//            ExceptionResponse response = new ExceptionResponse(HttpStatus.UNAUTHORIZED, BAD_CREDENTIALS_EXCEPTION_MESSAGE, "BadCredentialsException");
 
             when(authService.getToken(any())).thenThrow(exception);
 
@@ -156,11 +144,8 @@ class AuthControllerTest {
 
         @Test
         void test_createAuthToken_dBError() throws Exception {
-//            jwtRequest.setUsername("user");
-//            jwtRequest.setPassword("password");
             DataSourceLookupFailureException exception = new DataSourceLookupFailureException("it does not matter");
             response = getExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE, exception);
-//            ExceptionResponse response = getExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE, exception);
 
             when(authService.getToken(any())).thenThrow(exception);
 
@@ -183,6 +168,9 @@ class AuthControllerTest {
                     .andExpect(status().isInternalServerError())
                     .andExpect(content().json(mapper.writeValueAsString(response)));
         }
+
+        record IncorrectJwtRequest(String name, String password) {
+        }
     }
 
     @Nested
@@ -200,27 +188,18 @@ class AuthControllerTest {
         }
 
         @Test
-        void test_createNewUser_success() throws Exception{
-//            UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-//            userRegistrationDto.setUserName("user");
-//            userRegistrationDto.setPassword("password");
-//            userRegistrationDto.setVerifyPassword("password");
-
+        void test_createNewUser_success() throws Exception {
             doNothing().when(userService).saveUser(any());
 
             mockMvc.perform(post(url)
                             .contentType(APPLICATION_JSON)
                             .content(mapper.writeValueAsString(userRegistrationDto)))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("message").value( String.format(CREATION_MESSAGE, "user")));
+                    .andExpect(jsonPath("message").value(String.format(CREATION_MESSAGE, "user")));
         }
 
         @Test
-        void test_createNewUser_dBError() throws Exception{
-//            UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-//            userRegistrationDto.setUserName("user");
-//            userRegistrationDto.setPassword("password");
-//            userRegistrationDto.setVerifyPassword("password");
+        void test_createNewUser_dBError() throws Exception {
             DataSourceLookupFailureException exception = new DataSourceLookupFailureException("it does not matter");
             response = getExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE, exception);
 
@@ -233,14 +212,10 @@ class AuthControllerTest {
                     .andExpect(content().json(mapper.writeValueAsString(response)));
         }
 
-        record IncorrectRegistrationBody(String name, String surname, String password) {
-        }
-
-
         @Test
         void test_createNewUser_incorrectBody() throws Exception {
             IncorrectRegistrationBody incorrectRegistrationBody = new IncorrectRegistrationBody("test", "ester", "password");
-            errors = List.of("Verify password","The entered passwords do not match","Enter username");
+            errors = List.of("Verify password", "The entered passwords do not match", "Enter username");
             errorValidationResponse = new ErrorValidationResponse(HttpStatus.BAD_REQUEST, errors, METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE);
 
             mockMvc.perform(post(url)
@@ -274,6 +249,9 @@ class AuthControllerTest {
                             .content(mapper.writeValueAsString(request)))
                     .andExpect(status().isInternalServerError())
                     .andExpect(content().json(mapper.writeValueAsString(response)));
+        }
+
+        record IncorrectRegistrationBody(String name, String surname, String password) {
         }
     }
 }

@@ -13,9 +13,5 @@ public interface UserMapper {
     @Mapping(target = "role", source = "user.role.name")
     UserDto convertToDto(User user);
 
-//    @InheritInverseConfiguration
-//    @Mapping(target = "role", expression = "java(new Role(dto.getRole()))")
-//    User convertToDomain(UserDto userDto);
-
     User convertToDomain(UserRegistrationDto userRegistrationDto);
 }

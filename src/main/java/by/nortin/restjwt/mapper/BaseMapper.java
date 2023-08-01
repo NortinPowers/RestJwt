@@ -9,6 +9,4 @@ import org.mapstruct.ReportingPolicy;
 public interface BaseMapper {
 
     BaseDto convertToDto(BaseEntity baseEntity);
-
-    BaseEntity convertToEntity(BaseDto baseDto);
 }

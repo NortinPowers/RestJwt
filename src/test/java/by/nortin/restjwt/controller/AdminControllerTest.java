@@ -1,8 +1,14 @@
 package by.nortin.restjwt.controller;
 
-import static by.nortin.restjwt.utils.ResponseUtils.*;
+import static by.nortin.restjwt.test.utils.ResponseUtils.CHANGE_ROLE_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.NOT_FOUND_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.getExceptionResponse;
+import static by.nortin.restjwt.test.utils.ResponseUtils.getObjectMapperWithTimeModule;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -12,7 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import by.nortin.restjwt.dto.UserDto;
 import by.nortin.restjwt.model.ExceptionResponse;
 import by.nortin.restjwt.service.AdminService;
-import by.nortin.restjwt.utils.ResponseUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -27,7 +32,6 @@ import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureExcepti
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -45,13 +49,12 @@ class AdminControllerTest {
     private final ObjectMapper mapper;
 
     {
-        mapper = ResponseUtils.getObjectMapperWithTimeModule();
+        mapper = getObjectMapperWithTimeModule();
     }
 
     {
         exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", "AccessDeniedException");
     }
-
 
     @Nested
     class TestSetAdmin {
@@ -74,14 +77,9 @@ class AdminControllerTest {
         @Test
         @WithMockUser(username = "user", roles = "USER")
         void test_setAdmin_roleUser_denied() throws Exception {
-//            ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", "AccessDeniedException");
-//            ObjectMapper mapper = getObjectMapperWithTimeModule();
-//            String accessDeniedExceptionJson = "{\"status\":403,\"timestamp\":\"2023-07-26\",\"message\":\"Access Denied\",\"type\":\"AccessDeniedException\"}";
-
             mockMvc.perform(patch(url, id))
                     .andExpect(status().isForbidden())
                     .andExpect(content().json(mapper.writeValueAsString(exceptionResponse)));
-//                    .andExpect(content().json(accessDeniedExceptionJson));
         }
 
         @Test
@@ -124,7 +122,6 @@ class AdminControllerTest {
     @Nested
     class TestGetAllUser {
 
-        //        private final String url;
         private final ObjectMapper mapper;
 
         {
@@ -143,7 +140,6 @@ class AdminControllerTest {
         @Test
         @WithMockUser(username = "user", roles = "USER")
         void test_getAllUser_roleUser_denied() throws Exception {
-//            ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", "AccessDeniedException");
 
             mockMvc.perform(get(url))
                     .andExpect(status().isForbidden())

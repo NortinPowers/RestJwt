@@ -1,4 +1,4 @@
-package by.nortin.restjwt.utils;
+package by.nortin.restjwt.test.utils;
 
 import java.beans.FeatureDescriptor;
 import java.util.Arrays;

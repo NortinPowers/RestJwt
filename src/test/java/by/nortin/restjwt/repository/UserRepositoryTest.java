@@ -1,6 +1,6 @@
 package by.nortin.restjwt.repository;
 
-import static by.nortin.restjwt.Utils.Constants.TEST_PROPERTY_SOURCE_LOCATIONS;
+import static by.nortin.restjwt.utils.Constants.TEST_PROPERTY_SOURCE_LOCATIONS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

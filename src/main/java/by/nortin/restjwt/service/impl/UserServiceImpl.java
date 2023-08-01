@@ -1,5 +1,9 @@
 package by.nortin.restjwt.service.impl;
 
+import static by.nortin.restjwt.test.utils.Constants.ROLE_ADMIN;
+import static by.nortin.restjwt.test.utils.Constants.ROLE_USER;
+import static by.nortin.restjwt.test.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
+
 import by.nortin.restjwt.domain.Role;
 import by.nortin.restjwt.domain.User;
 import by.nortin.restjwt.dto.UserDto;
@@ -35,13 +39,12 @@ public class UserServiceImpl implements UserService {
     public void saveUser(UserRegistrationDto userRegistrationDto) {
         userRegistrationDto.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
         User user = userMapper.convertToDomain(userRegistrationDto);
-        Optional<Role> optionalRole = roleRepository.findByName("ROLE_USER");
+        Optional<Role> optionalRole = roleRepository.findByName(ROLE_USER);
         if (optionalRole.isPresent()) {
             user.setRole(optionalRole.get());
             userRepository.save(user);
         } else {
-            //can be empty
-            throw new DataSourceLookupFailureException("DataSource could not be obtained");
+            throw new DataSourceLookupFailureException(DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE);
         }
     }
 
@@ -54,14 +57,14 @@ public class UserServiceImpl implements UserService {
     public void setRoleAdmin(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
-            Optional<Role> optionalRole = roleRepository.findByName("ROLE_ADMIN");
+            Optional<Role> optionalRole = roleRepository.findByName(ROLE_ADMIN);
             if (optionalRole.isPresent()) {
                 User user = optionalUser.get();
                 Role role = optionalRole.get();
                 user.setRole(role);
                 userRepository.save(user);
             } else {
-                throw new DataSourceLookupFailureException("DataSource could not be obtained");
+                throw new DataSourceLookupFailureException(DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE);
             }
         }
     }

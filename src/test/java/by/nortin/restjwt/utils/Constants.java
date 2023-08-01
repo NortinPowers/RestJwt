@@ -1,4 +1,4 @@
-package by.nortin.restjwt.Utils;
+package by.nortin.restjwt.utils;
 
 import lombok.experimental.UtilityClass;
 

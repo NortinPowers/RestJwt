@@ -1,9 +1,9 @@
 package by.nortin.restjwt.controller;
 
-import static by.nortin.restjwt.utils.ResponseUtils.CREATION_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.DELETION_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.UPDATE_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.getSuccessResponse;
+import static by.nortin.restjwt.test.utils.ResponseUtils.CREATION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.DELETION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.UPDATE_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.getSuccessResponse;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import by.nortin.restjwt.dto.BookDto;
@@ -36,7 +36,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Book", description = "Book management APIs")
-//@Validated
 @RestController
 @RequestMapping("/book")
 @RequiredArgsConstructor
@@ -54,7 +53,6 @@ public class BookController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-//    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping
     public ResponseEntity<List<BookDto>> getAll() {
         return ResponseEntity.ok(bookService.getAllBooks());

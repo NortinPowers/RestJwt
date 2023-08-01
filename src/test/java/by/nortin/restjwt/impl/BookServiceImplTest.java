@@ -1,13 +1,13 @@
 package by.nortin.restjwt.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import by.nortin.restjwt.domain.Book;
 import by.nortin.restjwt.dto.BookDto;
 import by.nortin.restjwt.mapper.BookMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class BookServiceImplTest {

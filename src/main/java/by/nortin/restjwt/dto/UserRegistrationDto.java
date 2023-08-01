@@ -1,7 +1,7 @@
 package by.nortin.restjwt.dto;
 
-import static by.nortin.restjwt.utils.Constants.PASSWORD_PATTERN;
-import static by.nortin.restjwt.utils.Constants.USERNAME_PATTERN;
+import static by.nortin.restjwt.test.utils.Constants.PASSWORD_PATTERN;
+import static by.nortin.restjwt.test.utils.Constants.USERNAME_PATTERN;
 
 import by.nortin.restjwt.validator.PasswordMatching;
 import by.nortin.restjwt.validator.UserExist;
@@ -18,7 +18,6 @@ import lombok.Setter;
 @Valid
 @Schema(description = "Entity of User")
 public class UserRegistrationDto {
-//public class UserRegistrationDto extends BaseDto {
 
     @NotBlank(message = "Enter username")
     @Pattern(regexp = USERNAME_PATTERN, message = "Incorrect username")
@@ -33,5 +32,4 @@ public class UserRegistrationDto {
     @Pattern(regexp = PASSWORD_PATTERN, message = "Incorrect verify password")
     @Schema(description = "User`s verify password", example = "qwerty")
     private String verifyPassword;
-//    private RoleDto roleDto;
 }

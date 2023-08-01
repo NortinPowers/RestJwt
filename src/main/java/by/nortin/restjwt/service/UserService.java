@@ -9,11 +9,9 @@ public interface UserService {
 
     User getUserByUsername(String username);
 
-//    void saveUser(UserDto user);
     void saveUser(UserRegistrationDto user);
 
     boolean isUserExist(String userName);
-//    boolean isUserExist(UserRegistrationDto user);
 
     void setRoleAdmin(Long id);
 

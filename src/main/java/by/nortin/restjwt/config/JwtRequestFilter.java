@@ -1,5 +1,9 @@
 package by.nortin.restjwt.config;
 
+import static by.nortin.restjwt.test.utils.ResponseUtils.EXPIRED_JWT_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.MALFORMED_JWT_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.SIGNATURE_EXCEPTION_MESSAGE;
+
 import by.nortin.restjwt.handler.CustomAccessDeniedHandler;
 import by.nortin.restjwt.token.JwtTokenManager;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -25,24 +29,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtTokenManager jwtTokenManager;
-    //    private final CustomExceptionHandler customExceptionHandler;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-//    private final CustomAuthenticationEntryPointExceptionHandler customAuthenticationEntryPointExceptionHandler;
 
+    @SuppressWarnings("checkstyle:ReturnCount")
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
-//        String jwt = null;
-//        String username = null;
         if (authorization != null && authorization.startsWith("Bearer ")) {
             String jwt = authorization.substring(7);
-//            jwt = authorization.substring(7);
-//            boolean incorrect = false;
-//            String exceptionMessage = "";
             try {
                 String username = jwtTokenManager.getUserName(jwt);
-//                username = jwtTokenManager.getUserName(jwt);
-
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                             username,
@@ -51,53 +47,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     );
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
-//                filterChain.doFilter(request, response);
-
             } catch (MalformedJwtException exception) {
-                createExceptionResponse(request, response, "Incorrect token");
+                createExceptionResponse(request, response, MALFORMED_JWT_EXCEPTION_MESSAGE);
                 return;
-//                incorrect = true;
-//                exceptionMessage = "Incorrect token";
-
-//                +
-//                String errorText = "ERROR!!!";
-//                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-//                response.getWriter().write(errorText);
-
             } catch (ExpiredJwtException exception) {
-                createExceptionResponse(request, response, "The life cycle of the token is completed");
+                createExceptionResponse(request, response, EXPIRED_JWT_EXCEPTION_MESSAGE);
                 return;
-//                incorrect = true;
-//                exceptionMessage = "The life cycle of the token is completed";
             } catch (SignatureException exception) {
-                createExceptionResponse(request, response, "Incorrect signature");
+                createExceptionResponse(request, response, SIGNATURE_EXCEPTION_MESSAGE);
                 return;
-//                incorrect = true;
-//                exceptionMessage = "Incorrect signature";
             }
-//            } finally {
-//                if (incorrect) {
-//                    createExceptionResponse(request, response, exceptionMessage);
-////                    customAccessDeniedHandler.handle(request, response, new AccessDeniedException(exceptionMessage));
-//                    //noinspection ReturnInsideFinallyBlock
-//
-//                    // rewrite (or if (flag) on chain)
-////                    return;
-////                    customAuthenticationEntryPointExceptionHandler.commence(request, response, new AuthenticationException(exceptionMessage) {
-////                    });
-//                }
-//            }
-//            filterChain.doFilter(request, response);
         }
-
-//        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-//                    username,
-//                    null,
-//                    jwtTokenManager.getUserRoles(jwt).stream().map(SimpleGrantedAuthority::new).toList()
-//            );
-//            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-//        }
         filterChain.doFilter(request, response);
     }
 

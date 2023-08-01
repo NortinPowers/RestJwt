@@ -1,6 +1,6 @@
 package by.nortin.restjwt.token;
 
-import static by.nortin.restjwt.utils.Constants.ROLES;
+import static by.nortin.restjwt.test.utils.Constants.ROLES;
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 
 import io.jsonwebtoken.Claims;
@@ -21,9 +21,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenManager {
 
-//    @Value("${jwt.secret}")
-//    private String secret;
-
     private final Key key;
 
     @Value("${jwt.lifetime}")
@@ -41,13 +38,11 @@ public class JwtTokenManager {
         claims.put(ROLES, roles);
         Date issuedDate = new Date();
         Date expiredDate = new Date(issuedDate.getTime() + jwtLifetime.toMillis());
-//        Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(issuedDate)
                 .setExpiration(expiredDate)
-//                .signWith(HS256, secret)
                 .signWith(key, HS256)
                 .compact();
     }
@@ -62,7 +57,6 @@ public class JwtTokenManager {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-//        Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

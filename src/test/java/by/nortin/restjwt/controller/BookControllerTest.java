@@ -1,15 +1,15 @@
 package by.nortin.restjwt.controller;
 
-import static by.nortin.restjwt.utils.ResponseUtils.BOOK_NOT_FOUND_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.CREATION_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.DELETION_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.HTTP_NOT_READABLE_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.NOT_FOUND_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.UPDATE_MESSAGE;
-import static by.nortin.restjwt.utils.ResponseUtils.getExceptionResponse;
-import static by.nortin.restjwt.utils.ResponseUtils.getObjectMapperWithTimeModule;
+import static by.nortin.restjwt.test.utils.ResponseUtils.BOOK_NOT_FOUND_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.CREATION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.DELETION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.HTTP_NOT_READABLE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.NOT_FOUND_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.UPDATE_MESSAGE;
+import static by.nortin.restjwt.test.utils.ResponseUtils.getExceptionResponse;
+import static by.nortin.restjwt.test.utils.ResponseUtils.getObjectMapperWithTimeModule;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -154,7 +154,6 @@ class BookControllerTest {
                     .andExpect(status().isNotFound())
                     .andExpect(content().json(mapper.writeValueAsString(response)));
         }
-
     }
 
     @Nested
@@ -180,9 +179,7 @@ class BookControllerTest {
         @Test
         @WithMockUser(username = "user", roles = "USER")
         void test_create_roleUser_denied() throws Exception {
-            // +/-? message
             AccessDeniedException exception = new AccessDeniedException("Access Denied");
-//            ExceptionResponse response = getExceptionResponse(HttpStatus.FORBIDDEN, "Access Denied", exception);
             ExceptionResponse response = getExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage(), exception);
 
             mockMvc.perform(post(url)
@@ -195,10 +192,6 @@ class BookControllerTest {
         @Test
         @WithMockUser(username = "admin", roles = "ADMIN")
         void test_create_roleAdmin_alloyed() throws Exception {
-//            BookDto bookDto = new BookDto();
-//            bookDto.setTitle("New Book");
-//            bookDto.setAuthor("Book`s Author");
-
             doNothing().when(bookService).addBook(bookDto);
 
             mockMvc.perform(post(url)

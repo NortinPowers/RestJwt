@@ -1,6 +1,6 @@
 package by.nortin.restjwt.handler;
 
-import static by.nortin.restjwt.utils.ResponseUtils.getObjectMapperWithTimeModule;
+import static by.nortin.restjwt.test.utils.ResponseUtils.getObjectMapperWithTimeModule;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import by.nortin.restjwt.exception.CustomExceptionHandler;
