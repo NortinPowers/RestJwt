@@ -1,8 +1,8 @@
 package by.nortin.restjwt.config;
 
-import static by.nortin.restjwt.test.utils.ResponseUtils.EXPIRED_JWT_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.MALFORMED_JWT_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.SIGNATURE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.EXPIRED_JWT_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.MALFORMED_JWT_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.SIGNATURE_EXCEPTION_MESSAGE;
 
 import by.nortin.restjwt.handler.CustomAccessDeniedHandler;
 import by.nortin.restjwt.token.JwtTokenManager;

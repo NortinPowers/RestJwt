@@ -1,11 +1,11 @@
 package by.nortin.restjwt.controller;
 
-import static by.nortin.restjwt.test.utils.ResponseUtils.BAD_CREDENTIALS_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.CREATION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.HTTP_NOT_READABLE_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.getExceptionResponse;
+import static by.nortin.restjwt.utils.ResponseUtils.BAD_CREDENTIALS_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.CREATION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.HTTP_NOT_READABLE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.getExceptionResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -23,7 +23,7 @@ import by.nortin.restjwt.model.ErrorValidationResponse;
 import by.nortin.restjwt.model.ExceptionResponse;
 import by.nortin.restjwt.service.AuthService;
 import by.nortin.restjwt.service.UserService;
-import by.nortin.restjwt.test.utils.ResponseUtils;
+import by.nortin.restjwt.utils.ResponseUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.Nested;

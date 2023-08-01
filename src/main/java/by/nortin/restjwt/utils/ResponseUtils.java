@@ -1,4 +1,4 @@
-package by.nortin.restjwt.test.utils;
+package by.nortin.restjwt.utils;
 
 import by.nortin.restjwt.model.ExceptionResponse;
 import by.nortin.restjwt.model.MessageResponse;

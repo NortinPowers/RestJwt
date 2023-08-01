@@ -1,7 +1,7 @@
 package by.nortin.restjwt.dto;
 
-import static by.nortin.restjwt.test.utils.Constants.PASSWORD_PATTERN;
-import static by.nortin.restjwt.test.utils.Constants.USERNAME_PATTERN;
+import static by.nortin.restjwt.utils.Constants.PASSWORD_PATTERN;
+import static by.nortin.restjwt.utils.Constants.USERNAME_PATTERN;
 
 import by.nortin.restjwt.validator.PasswordMatching;
 import by.nortin.restjwt.validator.UserExist;

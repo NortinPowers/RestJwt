@@ -1,8 +1,8 @@
 package by.nortin.restjwt.service.impl;
 
-import static by.nortin.restjwt.test.utils.Constants.ROLE_ADMIN;
-import static by.nortin.restjwt.test.utils.Constants.ROLE_USER;
-import static by.nortin.restjwt.test.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.Constants.ROLE_ADMIN;
+import static by.nortin.restjwt.utils.Constants.ROLE_USER;
+import static by.nortin.restjwt.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
 
 import by.nortin.restjwt.domain.Role;
 import by.nortin.restjwt.domain.User;

@@ -1,10 +1,10 @@
 package by.nortin.restjwt.controller;
 
-import static by.nortin.restjwt.test.utils.ResponseUtils.CHANGE_ROLE_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.NOT_FOUND_EXCEPTION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.getExceptionResponse;
-import static by.nortin.restjwt.test.utils.ResponseUtils.getObjectMapperWithTimeModule;
+import static by.nortin.restjwt.utils.ResponseUtils.CHANGE_ROLE_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.DATA_SOURCE_LOOKUP_FAILURE_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.NOT_FOUND_EXCEPTION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.getExceptionResponse;
+import static by.nortin.restjwt.utils.ResponseUtils.getObjectMapperWithTimeModule;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;

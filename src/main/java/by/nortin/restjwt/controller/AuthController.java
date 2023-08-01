@@ -1,7 +1,7 @@
 package by.nortin.restjwt.controller;
 
-import static by.nortin.restjwt.test.utils.ResponseUtils.CREATION_MESSAGE;
-import static by.nortin.restjwt.test.utils.ResponseUtils.getSuccessResponse;
+import static by.nortin.restjwt.utils.ResponseUtils.CREATION_MESSAGE;
+import static by.nortin.restjwt.utils.ResponseUtils.getSuccessResponse;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import by.nortin.restjwt.dto.JwtRequest;

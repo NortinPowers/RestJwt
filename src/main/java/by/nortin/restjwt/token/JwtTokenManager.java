@@ -1,6 +1,6 @@
 package by.nortin.restjwt.token;
 
-import static by.nortin.restjwt.test.utils.Constants.ROLES;
+import static by.nortin.restjwt.utils.Constants.ROLES;
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 
 import io.jsonwebtoken.Claims;

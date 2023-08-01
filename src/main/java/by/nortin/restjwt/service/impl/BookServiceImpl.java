@@ -6,7 +6,7 @@ import by.nortin.restjwt.exception.BookNotFoundException;
 import by.nortin.restjwt.mapper.BookMapper;
 import by.nortin.restjwt.repository.BookRepository;
 import by.nortin.restjwt.service.BookService;
-import by.nortin.restjwt.test.utils.ObjectHandlerUtils;
+import by.nortin.restjwt.utils.ObjectHandlerUtils;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
