@@ -5,6 +5,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import lombok.Setter;
 @Table(name = "roles")
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true)
 public class Role extends BaseEntity implements Serializable {
 
     private String name;

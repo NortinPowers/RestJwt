@@ -6,6 +6,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import lombok.Setter;
 @Table(name = "users")
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true)
 public class User extends BaseEntity implements Serializable {
 
     @Column(name = "user_name")

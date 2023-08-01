@@ -6,6 +6,7 @@ import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class JwtTokenManager {
     private Duration jwtLifetime;
 
     public JwtTokenManager(@Value("${jwt.secret}") String secret) {
-        this.key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+        this.key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
     }
 
     public String generateJwtToken(UserDetails userDetails) {
