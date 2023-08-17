@@ -75,6 +75,7 @@ class AdminServiceImplTest {
             verify(userService, atLeastOnce()).getAllUsers();
         }
 
+
         @Test
         void test_getAllUsers_getNotEmptyList() {
             UserDto userDto = new UserDto();
